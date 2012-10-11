@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo -e "\e[0;31mIniciar y registrar: no implementado\e[0m"
+
+generarArchivos $CONFIG_DE_COMANDO DeComando
+
+for i in `cat $MODULOS_DE_COMANDO_ACTIVOS`
+do
+	ejecutarComando moduloDeComando "$i iniciar"
+done
+
+generarArchivos $CONFIG_PERIODICOS Periodicos
+
+for i in `cat $MODULOS_PERIODICOS_ACTIVOS`
+do
+        ejecutarComando moduloPeriodico "$i iniciar"
+done

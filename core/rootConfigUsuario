@@ -1,0 +1,64 @@
+#!/bin/bash
+
+USUARIO=$1
+
+if `cat /etc/passwd | grep $USUARIO > /dev/null`
+then
+	
+	DIRECTORIO_SHIELD=/etc/SHIELD
+        DIRECTORIO_DEL_NUCLEO=${DIRECTORIO_SHIELD}/core
+
+
+	mkdir usr_$USUARIO
+	
+
+	# Crear archivos de configuración de modulos habilitados
+	echo ${DIRECTORIO_SHIELD}/modulos/deComando/mockModulo/mockModulo : on > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+	echo ${DIRECTORIO_SHIELD}/modulos/deComando/Seguridad/Seguridad : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+	echo ${DIRECTORIO_SHIELD}/modulos/deComando/auditoria/auditoria : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+	echo ${DIRECTORIO_SHIELD}/modulos/deComando/controlDeCesiones/controlDeCesiones : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+
+	echo ${DIRECTORIO_SHIELD}/modulos/periodicos/mockPeriodicos/mockPeriodicos : on > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+	echo ${DIRECTORIO_SHIELD}/modulos/periodicos/controlDeCarga/controlDeCarga : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}
+	echo ${DIRECTORIO_SHIELD}/modulos/periodicos/limitaciones/limitaciones : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+	echo ${DIRECTORIO_SHIELD}/modulos/periodicos/limitacionDeTraficoDeRed/limitacionDeTraficoDeRed : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+
+	# Crear archivo de inicialización
+	echo '#!/bin/bash' > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export DIRECTORIO_SHIELD=/etc/SHIELD >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export DIRECTORIO_DEL_NUCLEO=${DIRECTORIO_SHIELD}/core >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export CONFIG_PERIODICOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO} >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export CONFIG_DE_COMANDO=${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO} >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export MODULOS_DE_COMANDO_ACTIVOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/nombresDeModulosDeComando_${USUARIO} >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export MODULOS_PERIODICOS_ACTIVOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/nombresDeModulosPeriodicos_${USUARIO} >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export INTERVALO_PERIODICOS=20s >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export INTERVALO_VERIFICAR_CAMBIOS=30s >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export PROMPT_PRINCIPAL=\'Ingrese un comando,o teclee salir para terminar: \' >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export PATH_ANTIGUA=$PATH >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo export PATH=${PATH}:${DIRECTORIO_DEL_NUCLEO} >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo cd $HOME >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+	echo core >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar
+
+
+	# Crear archivo de desinicializacion
+	echo '#!/bin/bash' > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset CONFIG_PERIODICOS >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset CONFIG_DE_COMANDO >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset MODULOS_DE_COMANDO_ACTIVOS >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset MODULOS_PERIODICOS_ACTIVOS >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset INTERVALO_PERIODICOS >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset INTERVALO_VERIFICAR_CAMBIOS >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo unset PROMPT_PRINCIPAL >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+	echo export PATH=PATH_ANTIGUA > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar
+
+	# Agregar archivos de inicio y salida a basrc y bash_logout
+	echo source ${DIRECTORIO_SHIELD}/usr_${USUARIO}/inicializar >> ${HOME}/.bashrc
+
+	echo source ${DIRECTORIO_SHIELD}/usr_${USUARIO}/desinicializar >> ${HOME}/.bash_logout
+
+	chown $USUARIO usr_$USUARIO
+	chown $USUARIO ${DIRECTORIO_SHIELD}/usr_$USUARIO/inicializar
+	chown $USUARIO ${DIRECTORIO_SHIELD}/usr_$USUARIO/desinicializar
+else
+	echo El usuario no existe
+fi

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo -e "\e[0;31mApagar: no implementado\e[0m"
+

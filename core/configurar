@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# 1 : nombre de usuario
+
+mkdir usr_$1
+
+export USUARIO=$1
+
+echo ${DIRECTORIO_SHIELD}/modulos/deComando/mockModulo/mockModulo : on > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+echo ${DIRECTORIO_SHIELD}/modulos/deComando/Seguridad/Seguridad : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+echo ${DIRECTORIO_SHIELD}/modulos/deComando/auditoria/auditoria : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+echo ${DIRECTORIO_SHIELD}/modulos/deComando/controlDeCesiones/controlDeCesiones : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+
+echo ${DIRECTORIO_SHIELD}/modulos/periodicos/mockPeriodicos/mockPeriodicos : on > ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+echo ${DIRECTORIO_SHIELD}/modulos/periodicos/controlDeCarga/controlDeCarga : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}
+echo ${DIRECTORIO_SHIELD}/modulos/periodicos/limitaciones/limitaciones : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+echo ${DIRECTORIO_SHIELD}/modulos/periodicos/limitacionDeTraficoDeRed/limitacionDeTraficoDeRed : off >> ${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}   
+
+export CONFIG_PERIODICOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModPeriodicos_${USUARIO}
+export CONFIG_DE_COMANDO=${DIRECTORIO_SHIELD}/usr_${USUARIO}/ConfigModDeComando_${USUARIO}
+export MODULOS_DE_COMANDO_ACTIVOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/nombresDeModulosDeComando_${USUARIO}
+export MODULOS_PERIODICOS_ACTIVOS=${DIRECTORIO_SHIELD}/usr_${USUARIO}/nombresDeModulosPeriodicos_${USUARIO}
+export INTERVALO_PERIODICOS=20s
+export INTERVALO_VERIFICAR_CAMBIOS=30s
+export RUTA_VIGENTE=$(pwd)
+export PROMPT_PRINCIPAL='Ingrese un comando,o teclee salir para terminar: '
+
+export PATH=${PATH}:${DIRECTORIO_DEL_NUCLEO}

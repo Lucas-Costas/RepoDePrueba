@@ -1,0 +1,21 @@
+#!/bin/bash
+
+iniciarYRegistrarModulos
+
+temporizarPeriodicos &
+#Lanzo el script temporizador en segundo plano para que ejecute los periodicos
+
+PID_tempo=$! 
+#Me guardo el PID del temporizador para matarlo mas tarde
+
+verificarCambios & 
+PID_verificar=$!
+
+atenderComandos
+
+#Esto es para que mate al temporizador al salir y
+#no me muestre en la pantalla que mata al temporizador
+kill $PID_tempo > /dev/null
+kill $PID_verificar > /dev/null
+
+exit 0

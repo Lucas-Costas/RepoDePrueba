@@ -1,0 +1,75 @@
+#!/bin/bash
+
+usuario_actual="$(whoami)"
+ps u > aProcesos
+grep $usuario_actual aProcesos > aProcesosPosta
+lsof -u $usuario_actual > aArchivos
+
+
+#MEMORIA
+
+porcentaje_memoria=0
+cut -d " " -f10 aProcesosPosta > aPorcentajesMemoria
+while read line; do porcentaje_memoria=$(expr $porcentaje_memoria +  $line | bc ); done < aPorcentajesMemoria 
+	
+if $porcentaje_memoria > $USOPERMITIDOMEMORIA
+then
+echo -e "Uso de memoria excedido\nPorcentaje de memoria usado: $porcentaje_memoria, Porcentaje perimitido: $USOPERMITIDOMEMORIA" > log.txt
+exit 1
+fi
+
+rm aPorcentajesMemoria
+
+
+# USO CPU
+
+porcentaje_cpu=0
+cut -d " " -f8 aProcesosPosta > aPorcentajesCPU
+while read line; do porcentaje_cpu=$(expr $porcentaje_cpu +  $line | bc); done < aPorcentajesCPU
+
+if $porcentaje_cpu > $USOPERMITIDOCPU
+then
+echo -e "Uso de CPU excedido\nPorcentaje de CPU usado: $porcentaje_cpu, Porcentaje perimitido: $USOPERMITIDOCPU" > log.txt
+exit 1
+fi
+
+rm aPorcentajesCPU
+
+
+# PROCESOS
+
+cantidad_procesos=`grep -c $usuario_actual aProcesos`
+
+if $cantidad_procesos > $CANTIDADPERMITIDAPROCESOS
+then
+echo -e "Cantidad de procesos activos excedidos\nCantidad: $cantidad_procesos, Cantidad permitida: $CANTIDADPERMITIDAPROCESOS" > log.txt
+exit 1
+fi
+
+
+# ARCHIVOS
+
+cantidad_archivos=`grep -c $usuario_actual aArchivos`
+
+if $cantidad_archivos > $CANTIDADPERMITIDAARCHIVOS
+then
+echo -e "Cantidad de archivos abiertos excedida\nCantidad: $cantidad_archivos, Cantidad permitida: $CANTIDADPERMITIDAARCHIVOS" > log.txt
+exit 1
+fi
+
+
+# SOCKETS
+
+cantidad_sockets=`grep -c socket aArchivos`
+
+if $cantidad_sockets > $CANTIDADPERMITIDASOCKETS
+then
+echo -e "Cantidad de sockets excedida\nCantidad: $cantidad_sockets, Cantidad permitida: $CANTIDADPERMITIDASOCKETS" > log.txt
+exit 1
+fi
+
+
+#borro los archivos
+rm aProcesos
+rm aProcesosPosta
+rm aArchivos

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+primeraPalabra=$( echo $* | cut -d " " -f 1)
+
+for i in ayuda info_modulos listar_modulos actualizar_modulos salir apagar
+do
+        if [ $i = $primeraPalabra ]
+        then
+                exit 0
+        fi
+done
+exit 1

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+while(true)
+do
+        sleep $INTERVALO_VERIFICAR_CAMBIOS
+	echo -e "\e[0;31mVerificar cambios: no implementado\e[0m"
+
+	for i in `cat $MODULOS_DE_COMANDO_ACTIVOS`
+	do
+		if ps | grep $i
+		then
+		       	kill $(ps | grep $i | cut -d " " -f 2)
+			echo $i
+		fi
+	done
+	
+	for i in `cat $MODULOS_PERIODICOS_ACTIVOS`
+	do
+		if ps | grep $i
+		then
+			echo $i
+    			kill $(ps | grep $i | cut -d " " -f 2)
+		fi
+	done
+
+	iniciarYRegistrarModulos
+	
+done

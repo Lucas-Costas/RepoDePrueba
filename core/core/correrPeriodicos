@@ -1,0 +1,16 @@
+#!/bin/bash
+
+while read rutaModulo dosPuntos estado
+do
+        if [[ $estado = on ]]
+        then
+                source $rutaModulo procesar
+                if [[ $? -ne 0 ]]
+                then
+			echo -e "\e[0;31mFallo un periodico -Cerrar sesion, informar, logear-\e[0m"
+			#echo Se ha producido un error
+			#echo Se ha producido un error >> Errores.log
+			exit -1
+                fi
+        fi
+done < $CONFIG_PERIODICOS

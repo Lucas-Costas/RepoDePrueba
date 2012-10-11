@@ -1,0 +1,12 @@
+#!/bin/bash
+
+primeraPalabra=$( echo $* | cut -d " " -f 1)
+
+for i in `cat $MODULOS_PERIODICOS_ACTIVOS`
+do
+        if [ $i = $primeraPalabra ]
+        then
+                exit 0
+        fi
+done
+exit 1

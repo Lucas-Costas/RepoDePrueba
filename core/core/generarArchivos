@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Generar archivos lee un archivo de configuracion pasado como parametro
+# lo recorre y por cada modulo habilitado registra su nombre en un archivo
+# de nombres de modulo.
+
+# 1: archivo de configuracion de donde lee los modulos habilitados
+# 2: terminacion del archivo donde se graba
+
+echo -n " " > ${DIRECTORIO_SHIELD}/usr_${USER}/nombresDeModulos${2}_$USER
+while read rutaModulo dosPuntos estado
+do
+	if [ $estado = on ]
+	then
+		numeroDeBarras=$(echo ${rutaModulo//\// } | wc -w)
+		let f=$numeroDeBarras+1
+		nombreDeModulo=$(echo $rutaModulo | cut -d "/" -f $f)
+		echo -n "$nombreDeModulo " >> ${DIRECTORIO_SHIELD}/usr_${USER}/nombresDeModulos${2}_$USER
+	fi
+done < $1

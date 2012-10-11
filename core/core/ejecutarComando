@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#1: naturaleza del comando
+#2: comando
+
+case $1
+in
+	"builtin")
+		source ${DIRECTORIO_SHIELD}/builtins/$2
+		;; 
+	"moduloDeComando")
+		nombreDelModulo=$(echo $2 | cut -d " " -f 1)
+		rutaDelModulo=$(grep $nombreDelModulo $CONFIG_DE_COMANDO | cut -d " " -f 1)
+		source $rutaDelModulo $2
+		;;
+	"moduloPeriodico")
+                nombreDelModulo=$(echo $2 | cut -d " " -f 1)
+                rutaDelModulo=$(grep $nombreDelModulo $CONFIG_PERIODICOS | cut -d " " -f 1)
+                source $rutaDelModulo $2
+                ;;
+	"otro")
+		source pasarPorModulos $2 #2> /dev/null
+		;;
+esac

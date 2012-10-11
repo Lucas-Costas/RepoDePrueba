@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo aca lee las variables de entorno con los valores permitidos de cada cosa

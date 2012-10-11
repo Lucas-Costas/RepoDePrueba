@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo MockPeriodico se ejecuto bien
+exit 0

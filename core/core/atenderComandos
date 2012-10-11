@@ -1,0 +1,21 @@
+#!/bin/bash
+
+while(true)
+do
+	echo -n $PROMPT_PRINCIPAL
+	read entrada
+
+	if [ "$entrada" == "" ]
+	then
+		continue
+	fi
+
+	if [ "$entrada" == "salir" ]
+	then
+		break
+	else
+		naturalezaDeEntrada=$(determinarNaturalezaDeEntrada "$entrada")
+	fi
+	
+	source ejecutarComando $naturalezaDeEntrada "$entrada" 
+done

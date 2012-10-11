@@ -1,0 +1,14 @@
+#!/bin/bash
+
+user=$1
+comando=$2
+prohibido=0 #valor por defecto
+
+while read line
+do
+if [ $line = $comando ]
+then
+prohibido=1 #el while encontro un comando denegado para el usuario
+fi
+done < $user.permisos
+exit $prohibido

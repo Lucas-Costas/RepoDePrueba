@@ -1,0 +1,17 @@
+#!/bin/bash
+
+while read rutaModulo dosPuntos estado
+do
+	if [[ $estado = on ]]
+	then
+		source $rutaModulo procesar $*
+		resultado=$?
+		if [[ $resultado -eq 0 ]]
+		then
+			eval "$*"
+		else
+			echo No se puede ejecutar el comando
+		    	continue	
+		fi
+	fi
+done < $CONFIG_DE_COMANDO

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if esUnComandoInterno $1
+then
+	echo builtin
+	exit 0
+elif estaDirigidoAUnModuloDeComando $1 
+then
+	echo moduloDeComando
+	exit 0
+elif estaDirigidoAUnModuloPeriodico $1
+then
+	echo moduloPeriodico
+	exit 0
+else
+	echo otro
+	exit 0
+fi

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo -e "\e[0;31mListar: no implementado\e[0m"
+
