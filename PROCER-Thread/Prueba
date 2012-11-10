@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#Un comentario para probar
+#El parser de PROCER
+
+variables a,b,c
+
+comienzo_programa
+a=2
+inicio_for:
+b=a+1
+io(1,1)
+a=1+2
+c=30;4
+imprimir a
+imprimir b
+imprimir c
+unaFuncion()
+ssc b inicio_for
+b=0
+ssc b inicio_for
+
+fin_programa
+
+#Aca va una funcion.
+comienzo_funcion unaFuncion
+a=a+21;4
+io(9,0)
+fin_funcion
